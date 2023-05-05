@@ -1,10 +1,23 @@
-from typing import TypeVar, List, Sized
+from collections.abc import Set 
 
-T = TypeVar('T', bound=Sized)
+class ListBasedSet(collections.abc.Set):
+    ''' Alternate set implementation favoring space over speed
+        and not requiring the set elements to be hashable. '''
+    def __init__(self, iterable):
+        self.elements = lst = []
+        for value in iterable:
+            if value not in lst:
+                lst.append(value)
 
-def max_length(lst: List[T]) -> T:
-    return max(lst, key=len)
+    def __iter__(self):
+        return iter(self.elements)
 
-my_list = ['apple', 'banana', 'pear']
-result = max_length(my_list)
-print(result)  # Output: 'banana'
+    def __contains__(self, value):
+        return value in self.elements
+
+    def __len__(self):
+        return len(self.elements)
+
+s1 = ListBasedSet('abcdef')
+s2 = ListBasedSet('defghi')
+overlap = s1 & s2      
